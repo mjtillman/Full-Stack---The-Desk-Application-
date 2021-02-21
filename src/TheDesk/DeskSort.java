@@ -6,69 +6,66 @@ import java.util.List;
 
 public class DeskSort {
 
-  private static int getEnd(List<Integer> list) {
-    return list.size() - 1;
-  }
+  private static List<Integer> rawList = new ArrayList<>();
+
+  private static int rawEnd() { return rawList.size() - 1; }
 
   public static List<Integer> quickSort(final List<Integer> expenses) {
 
-    List<Integer> rawSortedList = sort(expenses);
-    List<Integer> sortedList = partitioner(rawSortedList);
+    rawList.addAll(expenses);
 
-    return sortedList;
+    qSort(0, rawEnd());
+
+    System.out.println("" +
+        "Your expenses have been sorted:" +
+        "\n\t" + rawList);
+
+    return rawList;
   }
 
-  private static List<Integer> sort(List<Integer> sortedList) {
+  private static void qSort(final int start, final int end) {
+    if (start < end) {
+      int pIndex = partition(start, end);
 
-    System.out.print("Begin sort: \t");
-    printSort(sortedList);
+      qSort(start, pIndex - 1);
+      qSort(pIndex + 1, end);
+    }
+  }
 
-    int end = getEnd(sortedList);
-    int pivot = sortedList.get(end);
+  private static int partition (final int start, final int end) {
 
-    for (int i = 0; i < end; i++) {
-      if (sortedList.get(i) > pivot) {
-        Collections.swap(sortedList, i, i + 1);
+    int pivot = rawList.get(end);
+    int i = start - 1;
+
+//    System.out.print("\nStart: " + start +
+//        " End: " + end +
+//        " Pivot: " + pivot +
+//        "\nBegin: " + printSort(start, end));
+
+    for (int j = start; j < end; j++) {
+      if (rawList.get(j) <= pivot) {
+        i++;
+        Collections.swap(rawList, i, j);
+//        System.out.print("pass " + i + ": " + printSort(start, end));
       }
     }
 
-    int pivotIndex = sortedList.indexOf(pivot);
+    Collections.swap(rawList, i + 1, end);
+//    System.out.println("final: " + printSort(start, end));
 
-    for (int j = 0; j < end; j++) {
-      if (sortedList.get(j) > pivot) {
-        Collections.swap(sortedList, j, pivotIndex);
-        break;
-      }
+    return i + 1;
+  }
+
+  private static String printSort(final int start, final int end) {
+    StringBuilder sb = new StringBuilder();
+
+    for (int i = start; i < end; i++) {
+      sb.append(rawList.get(i)).append(", ");
     }
 
-    System.out.print("End sort: \t");
-    printSort(sortedList);
+    sb.append(rawList.get(end));
+    sb.append("\n");
 
-    return sortedList;
+    return sb.toString();
   }
-
-  private static List<Integer> partitioner(final List<Integer> partitionedList) {
-
-    List<Integer> partition1 = new ArrayList<>(partitionedList.subList(0, partitionedList.size() / 2 + 1));
-    List<Integer> partition2 = new ArrayList<>(partitionedList.subList(partitionedList.size() / 2 + 1, partitionedList.size()));
-
-    List<Integer> sortedPartition1 = sort(partition1);
-    List<Integer> sortedPartition2 = sort(partition2);
-
-    List<Integer> finalList = new ArrayList<>();
-    finalList.addAll(sortedPartition1);
-    finalList.addAll(sortedPartition2);
-
-    printSort(finalList);
-
-    return finalList;
-  }
-
-  private static void printSort(List<Integer> list) {
-    for (int i : list) {
-      System.out.printf("%d, ", i);
-    }
-    System.out.printf("%n");
-  }
-
 }
