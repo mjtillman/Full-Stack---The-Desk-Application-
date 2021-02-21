@@ -42,7 +42,7 @@ public class DisplayMenus {
           expenses = sortExpenses(expenses);
           break;
         case 5:
-//          searchExpenses(expenses);
+          searchExpenses(expenses);
           break;
         case 6:
           exit = true;
@@ -67,9 +67,9 @@ public class DisplayMenus {
       return DeskSort.quickSort(expenses);
   }
 
-//  private static void searchExpenses(final List<Integer> expenses) {
-//    System.out.println();
-//  }
+  private static void searchExpenses(final List<Integer> expenses) {
+    DeskSearch.searchExpenses(expenses);
+  }
 
   private static void closeApp() {
     System.out.println("Closing your application... \nThank you!");
